@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div id="tweets-wrapper container">
 
 
@@ -40,6 +41,32 @@
   </div>
 
 
+=======
+<h3>Tweet Map</h3>
+
+<% @names.each do |object| %>
+  <%= object %>
+<% end %>
+<% @location.each do |object| %>
+  <%= object %>
+<% end %>
+<% @description.each do |object| %>
+  <%= object %>
+<% end %>
+<% @favorites_count.each do |object| %>
+  <%= object %>
+<% end %>
+<% @followers_count.each do |object| %>
+  <%= object %>
+<% end %>
+
+<div id="map" class="">
+
+</div>
+
+<div id="tweet-map-container">
+  <div id="tweet-map"></div>
+>>>>>>> d71722623ff4e263e58cb0be0d0e59d8f33278c0
 </div>
 
 <script>
@@ -62,6 +89,15 @@
     buildChart();
 
     // get latitude in longitude
+    var apiData = <%= @raw_tweets.to_json %>;
+    var geoLat;
+    var geoLong;
+    var locations;
+
+    console.log(apiData);
+
+    getCoordinates();
+
     function getCoordinates() {
       $.getJSON("http://www.telize.com/geoip?callback=?", function(json) {
       })
@@ -128,6 +164,23 @@
 
 
   // Print out an error if it doesn't work
+  function initMap() {
+    var myLatLng = { lat: geoLat, lng: geoLong };
+    var map = new google.maps.Map(document.getElementById('tweet-map'), {
+      zoom: 2,
+      center: myLatLng
+    });
+
+    var marker = new google.maps.Marker({
+      position: myLatLng,
+      map: map,
+      title: 'Hello World!'
+    });
+
+    // Loop that takes each location and finds through google maps, and creates marker
+    for
+  }
+
   function writeError() {
     var errors = document.createElement("div");
     errors.class = "error-message";
