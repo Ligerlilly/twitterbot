@@ -1,0 +1,84 @@
+<h3>Tweet Map</h3>
+
+<% @names.each do |object| %>
+  <%= object %>
+<% end %>
+<% @location.each do |object| %>
+  <%= object %>
+<% end %>
+<% @description.each do |object| %>
+  <%= object %>
+<% end %>
+<% @favorites_count.each do |object| %>
+  <%= object %>
+<% end %>
+<% @followers_count.each do |object| %>
+  <%= object %>
+<% end %>
+
+<div id="map" class="">
+
+</div>
+
+<div id="tweet-map-container">
+  <div id="tweet-map"></div>
+</div>
+
+<script>
+
+  $(document).ready(function() {
+
+    var apiData = <%= @raw_tweets.to_json %>;
+    var geoLat;
+    var geoLong;
+    var locations;
+
+    console.log(apiData);
+
+    getCoordinates();
+
+    function getCoordinates() {
+      $.getJSON("http://www.telize.com/geoip?callback=?", function(json) {
+      })
+      .fail(function(jqxhr, textStatus, error) {
+        var err = textStatus + ", " + error;
+        console.log("Request Failed: " + err);
+        writeError();
+      })
+      .done(function(json) {
+        zipCode = json.postalCode;
+        geoLat  = json.latitude;
+        geoLong = json.longitude;
+
+        initMap();
+      })
+      .always(function() {
+        console.log('Search complete');
+      });
+    }
+
+  function initMap() {
+    var myLatLng = { lat: geoLat, lng: geoLong };
+    var map = new google.maps.Map(document.getElementById('tweet-map'), {
+      zoom: 2,
+      center: myLatLng
+    });
+
+    var marker = new google.maps.Marker({
+      position: myLatLng,
+      map: map,
+      title: 'Hello World!'
+    });
+
+    // Loop that takes each location and finds through google maps, and creates marker
+    for
+  }
+
+  function writeError() {
+    var errors = document.createElement("div");
+    errors.class = "error-message";
+    errors.text = "Something went wrong :("
+    document.body.errorBox.appendChild(errors);
+  }
+});
+</script>

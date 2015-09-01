@@ -1,0 +1,34 @@
+h1, h2, h3, h4, li, a, button, .btn, input {
+  font-family: 'Lato';
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+
+#site-title {
+  margin-top: 1em;
+}
+
+h1 {
+  font-size: 64px;
+  font-weight: 300;
+}
+
+.button-container {
+  margin-top: 3em;
+}
+
+#tweet-map {
+  height: 400px;
+  width: 400px;
+}
+
+#tweet-map-container {
+  height: 100%;
+  margin: 0 auto;
+  width: 100%;
+}
