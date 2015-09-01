@@ -1,0 +1,6 @@
+development:
+  adapter: postgresql
+  database: twitterbot_dev
+test:
+  adapter: postgresql
+  database: twitterbot_test

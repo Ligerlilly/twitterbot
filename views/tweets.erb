@@ -1,0 +1,163 @@
+<div id="tweets-wrapper container">
+
+
+  <div class="row">
+    <div class="large 12 columns text-center">
+      <h1>Tweet Results</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="large-12 columns text-center">
+      <button id="show-filter">Search within?</button>
+    </div>
+  </div>
+    <form id="filter-form" class="hidden" action="/search-filter" method="post">
+      <div class="row">
+        <div class="large 12 columns text-center">
+          <input name="filter" placeholder="Bernie Sanders">
+        </div>
+
+        <div class="row">
+          <div class="large 12 columns text-center">
+            <button type="submit">Filter</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  <div class="row">
+    <div class="large 12 columns text-center">
+      <h1>Tweet Chart</h1>
+      <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+  </div>
+
+  <div class="row">
+    <div id="map-wrap" class="large 12 columns text-center">
+      <h1>Tweet Map</h1>
+      <div id="tweet-map"></div>
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+
+  $(document).ready(function() {
+    var geoLat;
+    var geoLong;
+    var lats = <%= @lats %>;
+    var lngs = <%= @lngs %>;
+    var matches = 1;
+    var total = 10;
+
+
+    //show form on click
+    $('#show-filter').on('click', function() {
+      $('#filter-form').toggleClass('hidden');
+    });
+
+    getCoordinates();
+    buildChart();
+
+    // get latitude in longitude
+    function getCoordinates() {
+      $.getJSON("http://www.telize.com/geoip?callback=?", function(json) {
+      })
+      .fail(function(jqxhr, textStatus, error) {
+        var err = textStatus + ", " + error;
+        console.log("Request Failed: " + err);
+        writeError();
+      })
+      .done(function(json) {
+        zipCode = json.postalCode;
+        geoLat  = json.latitude;
+        geoLong = json.longitude;
+
+        initMap();
+      })
+      .always(function() {
+        console.log('Search complete');
+      });
+    }
+
+    // build google map
+    function initMap() {
+      var myLatLng = { lat: geoLat, lng: geoLong };
+      var map = new google.maps.Map(document.getElementById('tweet-map'), {
+        zoom: 10,
+        center: myLatLng
+    });
+
+    // creates window pane for marker
+    function createInfoWindow(marker) {
+      var infowindow = new google.maps.InfoWindow({
+        content: "INSERT"
+      });
+      marker.addEventListener('click', function() {
+        infowindow.open(map, marker);
+      });
+    }
+
+    // plot user marker
+    var marker = new google.maps.Marker({
+      position: myLatLng,
+      map: map,
+      title: 'Hello World!'
+    });
+
+    // print out the marker to the map
+    var place = function(newMark) {
+      console.log('here');
+      newMark.setMap(map);
+    }
+
+    // Loop that takes each location and finds through google maps, and creates marker
+    for(i = 0; i < lats.length; i++) {
+      var marker = new google.maps.Marker({
+        position: { lat: lats[i], lng: lngs[i] },
+        map: map,
+        title: "INSERT USER VAR",
+      })
+      place(marker);
+      createInfoWindow(marker)
+    }
+  }
+
+
+  // Print out an error if it doesn't work
+  function writeError() {
+    var errors = document.createElement("div");
+    errors.class = "error-message";
+    errors.text = "Something went wrong :("
+    document.body.errorBox.appendChild(errors);
+  }
+
+  // create chart
+  function buildChart() {
+    var data = [
+        {
+            value: 300,
+            color:"#F7464A",
+            highlight: "#FF5A5E",
+            label: matches/total
+        },
+        {
+            value: 50,
+            color: "#46BFBD",
+            highlight: "#5AD3D1",
+            label: matches/total
+        },
+        {
+            value: 100,
+            color: "#FDB45C",
+            highlight: "#FFC870",
+            label: "Yellow"
+        }
+    ]
+    var ctx = document.getElementById("myChart").getContext("2d");
+    var myDoughnutChart = new Chart(ctx).Doughnut(data);
+  }
+});
+</script>
