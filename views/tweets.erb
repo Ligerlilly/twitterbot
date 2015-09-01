@@ -1,6 +1,5 @@
-<<<<<<< HEAD
-<div id="tweets-wrapper container">
 
+<div id="tweets-wrapper container">
 
   <div class="row">
     <div class="large 12 columns text-center">
@@ -41,34 +40,11 @@
   </div>
 
 
-=======
-<h3>Tweet Map</h3>
-
-<% @names.each do |object| %>
-  <%= object %>
-<% end %>
-<% @location.each do |object| %>
-  <%= object %>
-<% end %>
-<% @description.each do |object| %>
-  <%= object %>
-<% end %>
-<% @favorites_count.each do |object| %>
-  <%= object %>
-<% end %>
-<% @followers_count.each do |object| %>
-  <%= object %>
-<% end %>
-
-<div id="map" class="">
-
+  <div id="tweet-map-container">
+    <div id="tweet-map"></div>
+  </div>
+  
 </div>
-
-<div id="tweet-map-container">
-  <div id="tweet-map"></div>
->>>>>>> d71722623ff4e263e58cb0be0d0e59d8f33278c0
-</div>
-
 <script>
 
   $(document).ready(function() {

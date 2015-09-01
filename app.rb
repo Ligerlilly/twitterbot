@@ -115,7 +115,6 @@ class TwitterFetcher < Sinatra::Base
 
     @raw_tweets
 
-    # parse
     @names = []
     @location = []
     @description = []
@@ -130,11 +129,4 @@ class TwitterFetcher < Sinatra::Base
     end
 
     erb :results
-    # delete '/all' do
-    #   User.destroy_all
-    #   Tweet.destroy_all
-    #   redirect "/"
-    # end
-    ##
   end
-end
