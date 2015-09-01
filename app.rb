@@ -83,6 +83,25 @@ class TwitterFetcher < Sinatra::Base
       # Tweet.create({ tweet: tweet.text })
       # @raw_tweets.push(tweet)
       # @tweets.push "<img src='#{tweet.user.profile_image_url}' alt='img'> #{tweet.user.screen_name}: #{tweet.text} **** #{tweet.user.location} ++++ <a href='#{instagram}'>Instagram</a>"
+      fav_count = tweet.user.favourites_count || 0
+      begin
+        @user = User.create({name: tweet.user.name, favourites_count: fav_count, followers_count: tweet.user.followers_count, location: tweet.user.location, geolat: tweet.geo.coordinates[0], geolong: tweet.geo.coordinates[1]})
+
+      rescue ActiveRecord::RecordNotUnique
+
+      end
+
+
+
+      begin
+        Tweet.create({ tweet: tweet.text, user_id: @user.id })
+      rescue ActiveRecord::RecordNotUnique
+
+      end
+      @raw_tweets.push(tweet)
+      @tweets.push "<img src='#{tweet.user.profile_image_url}' alt='img'> #{tweet.user.screen_name}: #{tweet.text} **** #{tweet.user.location} ++++ <a href='#{instagram}'>Instagram</a>"
+
+
     end
 
     @raw_tweets
@@ -94,21 +113,6 @@ class TwitterFetcher < Sinatra::Base
 
     @lats
     @lngs
-
-      fav_count = tweet.user.favourites_count || 0
-      begin
-        @user = User.create({name: tweet.user.name, favourites_count: fav_count, followers_count: tweet.user.followers_count, location: tweet.user.location, geolat: tweet.geo.coordinates[0], geolong: tweet.geo.coordinates[1]})
-      rescue ActiveRecord::RecordNotUnique
-
-      end
-
-      begin
-        Tweet.create({ tweet: tweet.text, user_id: @user.id })
-      rescue ActiveRecord::RecordNotUnique
-
-      end
-      @raw_tweets.push(tweet)
-      @tweets.push "<img src='#{tweet.user.profile_image_url}' alt='img'> #{tweet.user.screen_name}: #{tweet.text} **** #{tweet.user.location} ++++ <a href='#{instagram}'>Instagram</a>"
 
     @users = User.all
 
