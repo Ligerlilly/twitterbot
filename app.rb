@@ -78,11 +78,8 @@ class TwitterFetcher < Sinatra::Base
         @lngs.push(tweet.geo.coordinates.last)
       end
 
-      # fav_count = tweet.user.favourites_count || 0
-      # User.create({name: tweet.user.name, favourites_count: fav_count, followers_count: tweet.user.followers_count, location: tweet.user.location, geolat: tweet.geo.coordinates[0], geolong: tweet.geo.coordinates[1]})
-      # Tweet.create({ tweet: tweet.text })
-      # @raw_tweets.push(tweet)
-      # @tweets.push "<img src='#{tweet.user.profile_image_url}' alt='img'> #{tweet.user.screen_name}: #{tweet.text} **** #{tweet.user.location} ++++ <a href='#{instagram}'>Instagram</a>"
+
+
       fav_count = tweet.user.favourites_count || 0
       begin
         @user = User.create({name: tweet.user.name, favourites_count: fav_count, followers_count: tweet.user.followers_count, location: tweet.user.location, geolat: tweet.geo.coordinates[0], geolong: tweet.geo.coordinates[1]})
@@ -91,10 +88,14 @@ class TwitterFetcher < Sinatra::Base
 
       end
 
-
+      if @user
+        user_id = @user.id
+      else
+        user_id = 0
+      end
 
       begin
-        Tweet.create({ tweet: tweet.text, user_id: @user.id })
+        Tweet.create({ tweet: tweet.text, user_id: user_id })
       rescue ActiveRecord::RecordNotUnique
 
       end
