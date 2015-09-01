@@ -1,3 +1,5 @@
+require 'sinatra/activerecord'
+require 'pg'
 require 'sinatra'
 require 'sinatra/jsonp'
 require 'rubygems'
@@ -5,6 +7,8 @@ require 'twitter'
 require 'pry'
 require './secrets'
 require 'sinatra/reloader'
+require './lib/user.rb'
+require './lib/tweet.rb'
 
 class TwitterFetcher < Sinatra::Base
   helpers Sinatra::Jsonp
@@ -41,9 +45,13 @@ class TwitterFetcher < Sinatra::Base
     @tweets = []
     @raw_tweets = []
     @@twitter_client.search("#{query}", {result_type: 'recent', geocode: "45.5434085,-122.654422,8mi", count: 50}).map do |tweet|
+
       if tweet.urls[0].respond_to? :url
         instagram = tweet.urls[0].url
       end
+      fav_count = tweet.user.favourites_count || 0
+      User.create({name: tweet.user.name, favourites_count: fav_count, followers_count: tweet.user.followers_count, location: tweet.user.location, geolat: tweet.geo.coordinates[0], geolong: tweet.geo.coordinates[1]})
+      Tweet.create({ tweet: tweet.text })
       @raw_tweets.push(tweet)
       @tweets.push "<img src='#{tweet.user.profile_image_url}' alt='img'> #{tweet.user.screen_name}: #{tweet.text} **** #{tweet.user.location} ++++ <a href='#{instagram}'>Instagram</a>"
     end
