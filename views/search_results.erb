@@ -1,0 +1,8 @@
+<h1>results for <%= @query %></h1>
+
+<ul>
+  <% @results.each do |r| %>
+
+  <li><%= r.tweet %></li>
+  <% end %>
+</ul>

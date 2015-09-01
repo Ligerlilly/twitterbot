@@ -1,3 +1,5 @@
+require 'sinatra/activerecord'
+require 'pg'
 require 'sinatra'
 require 'sinatra/jsonp'
 require 'rubygems'
@@ -5,8 +7,15 @@ require 'twitter'
 require 'pry'
 require './secrets'
 require 'sinatra/reloader'
+require './lib/user.rb'
+require './lib/tweet.rb'
+require 'will_paginate'
+require 'will_paginate/active_record'
+
 
 class TwitterFetcher < Sinatra::Base
+  include WillPaginate::Sinatra::Helpers
+
   helpers Sinatra::Jsonp
 
   @@twitter_client = Twitter::REST::Client.new do |config|
@@ -18,6 +27,23 @@ class TwitterFetcher < Sinatra::Base
 
   get '/' do
      erb :index
+  end
+
+  get '/data' do
+    @users = User.paginate(:page => params[:page], :per_page => 10)
+    @tweets = Tweet.all
+    erb :data
+  end
+
+  get '/data/search' do
+    erb :search_data
+  end
+
+  post '/data/search' do
+    @query = params.fetch('query')
+
+    @results = Tweet.find_tweets(@query)
+    erb :search_results
   end
 
   get '/search' do
@@ -40,13 +66,27 @@ class TwitterFetcher < Sinatra::Base
     end
     @tweets = []
     @raw_tweets = []
-    @@twitter_client.search("#{query}", {result_type: 'recent', geocode: "45.5434085,-122.654422,8mi", count: 50}).map do |tweet|
+    @@twitter_client.search("#{query}", {result_type: 'recent', geocode: "45.5434085,-122.654422,8mi"}).map do |tweet|
+
       if tweet.urls[0].respond_to? :url
         instagram = tweet.urls[0].url
+      end
+      fav_count = tweet.user.favourites_count || 0
+      begin
+        @user = User.create({name: tweet.user.name, favourites_count: fav_count, followers_count: tweet.user.followers_count, location: tweet.user.location, geolat: tweet.geo.coordinates[0], geolong: tweet.geo.coordinates[1]})
+      rescue ActiveRecord::RecordNotUnique
+
+      end
+
+      begin
+        Tweet.create({ tweet: tweet.text, user_id: @user.id })
+      rescue ActiveRecord::RecordNotUnique
+
       end
       @raw_tweets.push(tweet)
       @tweets.push "<img src='#{tweet.user.profile_image_url}' alt='img'> #{tweet.user.screen_name}: #{tweet.text} **** #{tweet.user.location} ++++ <a href='#{instagram}'>Instagram</a>"
     end
+    @users = User.all
 
     @raw_tweets
 
@@ -63,6 +103,12 @@ class TwitterFetcher < Sinatra::Base
       @favorites_count.push(tweet_object.user.favorites_count)
       @followers_count.push(tweet_object.user.followers_count)
     end
-    erb :tweets
+    erb :results
+    # delete '/all' do
+    #   User.destroy_all
+    #   Tweet.destroy_all
+    #   redirect "/"
+    # end
+    ##
   end
 end
