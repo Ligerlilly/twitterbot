@@ -128,5 +128,69 @@ class TwitterFetcher < Sinatra::Base
     end
 
     erb :results
+
   end
+
+  get '/election' do
+    erb :election
+  end
+
+  get '/election/democrats' do
+    erb :democrats
+  end
+
+  get '/election/repulicans' do
+    erb :repulicans
+  end
+
+  #deomcrats*
+
+  get '/election/democrats/clinton' do
+    erb :tweets
+  end
+
+  get '/election/democrats/sanders' do
+    erb :tweets
+  end
+
+  get '/election/democrats/chafee' do
+    erb :tweets
+  end
+
+  get '/election/democrats/webb' do
+    erb :tweets
+  end
+
+  #republicans
+
+  get '/election/republicans/trump' do
+
+    erb :tweets
+  end
+
+  get '/election/republicans/carson' do
+
+    erb :tweets
+  end
+
+  get '/election/republicans/bush' do
+
+    erb :tweets
+  end
+
+  get '/election/republicans/cruz' do
+
+    erb :tweets
+  end
+
+  get '/election/republicans/rubio' do
+
+    erb :tweets
+  end
+
+  get '/election/republicans/walker' do
+
+    erb :tweets
+  end
+
 end

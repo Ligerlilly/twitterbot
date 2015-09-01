@@ -3,7 +3,7 @@ require 'spec_helper'
 describe User do
   before do
     @user = User.create({name: 'Jason', favourites_count: 234, followers_count: 18000, location: 'Portland, OR', geolat:  45.58776474, geolong: -122.75852075 })
-    @tweet = Tweet.create({ tweet: 'hi', user_id: @user.id })
+    @tweet = Tweet.create({ tweet: 'HI THERE', user_id: @user.id })
   end
 
   describe '#name' do
@@ -39,6 +39,13 @@ describe User do
   describe '#geolong' do
     it 'returns the users longitude' do
       expect(@user.geolong).to eq -122.75852075
+    end
+  end
+
+  describe '.find_by_tweets' do
+    it 'returns users from tweets array' do
+      tweets = Tweet.find_tweets('hi')
+      expect(User.find_by_tweets(tweets)).to eq [@user]
     end
   end
 

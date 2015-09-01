@@ -17,6 +17,6 @@ class Tweet < ActiveRecord::Base
 private
 
   def tweet_downcase
-    self.tweet = self.tweet.downcase!
+    self.tweet = self.tweet.downcase
   end
 end
