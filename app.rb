@@ -35,6 +35,17 @@ class TwitterFetcher < Sinatra::Base
     erb :data
   end
 
+  get '/data/search' do
+    erb :search_data
+  end
+
+  post '/data/search' do
+    @query = params.fetch('query')
+
+    @results = Tweet.find_tweets(@query)
+    erb :search_results
+  end
+
   get '/search' do
     erb :search
   end
@@ -62,13 +73,13 @@ class TwitterFetcher < Sinatra::Base
       end
       fav_count = tweet.user.favourites_count || 0
       begin
-        User.create({name: tweet.user.name, favourites_count: fav_count, followers_count: tweet.user.followers_count, location: tweet.user.location, geolat: tweet.geo.coordinates[0], geolong: tweet.geo.coordinates[1]})
+        @user = User.create({name: tweet.user.name, favourites_count: fav_count, followers_count: tweet.user.followers_count, location: tweet.user.location, geolat: tweet.geo.coordinates[0], geolong: tweet.geo.coordinates[1]})
       rescue ActiveRecord::RecordNotUnique
 
       end
 
       begin
-        Tweet.create({ tweet: tweet.text })
+        Tweet.create({ tweet: tweet.text, user_id: @user.id })
       rescue ActiveRecord::RecordNotUnique
 
       end
@@ -92,8 +103,7 @@ class TwitterFetcher < Sinatra::Base
       @favorites_count.push(tweet_object.user.favorites_count)
       @followers_count.push(tweet_object.user.followers_count)
     end
-    erb :tweets
-    ##
+    erb :results
     # delete '/all' do
     #   User.destroy_all
     #   Tweet.destroy_all

@@ -5,6 +5,7 @@ require 'pg'
 require './lib/user.rb'
 require './lib/tweet.rb'
 require 'capybara/rspec'
+require 'shotgun'
 
 require './app'
 

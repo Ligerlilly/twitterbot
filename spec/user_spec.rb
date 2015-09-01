@@ -3,6 +3,7 @@ require 'spec_helper'
 describe User do
   before do
     @user = User.create({name: 'Jason', favourites_count: 234, followers_count: 18000, location: 'Portland, OR', geolat:  45.58776474, geolong: -122.75852075 })
+    @tweet = Tweet.create({ tweet: 'hi', user_id: @user.id })
   end
 
   describe '#name' do
@@ -40,4 +41,6 @@ describe User do
       expect(@user.geolong).to eq -122.75852075
     end
   end
+
+
 end
