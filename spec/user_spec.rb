@@ -28,4 +28,16 @@ describe User do
       expect(@user.location).to eq "Portland, OR"
     end
   end
+
+  describe '#geolat' do
+    it 'returns the users latitude' do
+      expect(@user.geolat).to eq 45.58776474
+    end
+  end
+
+  describe '#geolong' do
+    it 'returns the users longitude' do
+      expect(@user.geolong).to eq -122.75852075
+    end
+  end
 end
