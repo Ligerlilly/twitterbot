@@ -95,21 +95,18 @@
       var infowindow = new google.maps.InfoWindow({
         content: "INSERT"
       });
-      marker.addEventListener('click', function() {
-        infowindow.open(map, marker);
-      });
+
     }
 
     // plot user marker
     var marker = new google.maps.Marker({
       position: myLatLng,
       map: map,
-      title: 'Hello World!'
+      title: 'You are here!'
     });
 
     // print out the marker to the map
     var place = function(newMark) {
-      console.log('here');
       newMark.setMap(map);
     }
 
@@ -121,7 +118,11 @@
         title: "INSERT USER VAR",
       })
       place(marker);
-      createInfoWindow(marker)
+      createInfoWindow(marker);
+      marker.addEventListener('click', function() {
+        console.log('hi');
+        infowindow.open(map, marker);
+      });
     }
   }
 
