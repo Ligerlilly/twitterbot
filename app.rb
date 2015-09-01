@@ -12,7 +12,6 @@ require './lib/tweet.rb'
 require 'will_paginate'
 require 'will_paginate/active_record'
 
-
 class TwitterFetcher < Sinatra::Base
   include WillPaginate::Sinatra::Helpers
 
@@ -110,7 +109,7 @@ class TwitterFetcher < Sinatra::Base
       end
       @raw_tweets.push(tweet)
       @tweets.push "<img src='#{tweet.user.profile_image_url}' alt='img'> #{tweet.user.screen_name}: #{tweet.text} **** #{tweet.user.location} ++++ <a href='#{instagram}'>Instagram</a>"
-    end
+
     @users = User.all
 
     @raw_tweets
@@ -130,3 +129,4 @@ class TwitterFetcher < Sinatra::Base
 
     erb :results
   end
+end
