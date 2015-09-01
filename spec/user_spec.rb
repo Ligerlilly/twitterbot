@@ -10,9 +10,16 @@ describe User do
       expect(@user.name).to eq 'Jason'
     end
   end
+
   describe '#favourites_count' do
     it 'returns the count of the users favourites' do
       expect(@user.favourites_count).to eq 234
+    end
+  end
+
+  describe '#followers_count' do
+    it 'returns the count of the users followers' do
+      expect(@user.followers_count).to eq 18000
     end
   end
 end
