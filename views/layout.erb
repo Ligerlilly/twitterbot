@@ -19,18 +19,32 @@
   </head>
   <body>
 
+
+
+
     <div class="sticky fixed">
       <nav class="top-bar" data-topbar role="navigation" data-options="sticky_on: large">
         <section class="top-bar-section">
-          <ul>
+          <ul class="right">
             <li><a href="/search">find data</a></li>
             <li><a href="/data">data</a> </li>
             <li><a href="/data/search">search within data</a></li>
+
+            <li class="has-dropdown">
+              <a href="#">Election Data</a>
+              <ul class="dropdown">
+                <li><a href="/election/democrats">Democrat</a></li>
+              </ul>
+            </li>
+
           </ul>
           <a href="/" class="brand-logo">TwitterBot</a>
         </section>
       </nav>
     </div>
+
+
+
 
     <div id="site-wrapper" class="container">
       <%= yield %>
