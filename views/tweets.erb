@@ -7,24 +7,6 @@
   </div>
 
   <div class="row">
-    <div class="large-12 columns text-center">
-      <button id="show-filter">Search within?</button>
-    </div>
-  </div>
-    <form id="filter-form" class="hidden" action="/search-filter" method="post">
-      <div class="row">
-        <div class="large-4 columns text-center">
-          <input name="filter" type="text" placeholder="Bernie Sanders">
-        </div>
-
-        <div class="row">
-          <div class="large-4 columns text-center">
-            <button type="submit">Filter</button>
-          </div>
-        </div>
-      </div>
-    </form>
-  <div class="row">
     <div class="large-6 columns text-center" id="chartContainer">
       <h2 class="heading">Tweet Chart</h2>
       <div id="myChartLegend">
@@ -55,10 +37,6 @@
     var total = <%= @total %>;
     var matches = <%= @matches %>;
 
-    //show form on click
-    $('#show-filter').on('click', function() {
-      $('#filter-form').toggleClass('hidden');
-    });
     getCoordinates();
     buildChart();
 
