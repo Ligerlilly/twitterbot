@@ -96,7 +96,6 @@
         }
       }
 
-      var infowindow = new google.maps.InfoWindow();
       map = new google.maps.Map(document.getElementById('tweet-map'), mapOptions);
       map.mapTypes.set('map_style', styledMap);
       map.setMapTypeId('map_style');
@@ -123,10 +122,6 @@
       })
       place(marker);
       markers.push(marker);
-      google.maps.event.addListener(marker, 'click', function () {
-        infowindow.setContent(this.html);
-        infowindow.open(map, this);
-      });
     }
   }
 
@@ -154,6 +149,7 @@
         label: "Total Tweets"
       }
     ]
+
     var ctx = document.getElementById("myChart").getContext("2d");
     var myDoughnutChart = new Chart(ctx).Doughnut(data);
   }

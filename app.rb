@@ -156,26 +156,26 @@ class TwitterFetcher < Sinatra::Base
     @rubio = 0
     @walker = 0
 
-    @clinton += Tweet.find_tweets('hillary').count
-    @clinton += Tweet.find_tweets('clinton').count
-    @sanders += Tweet.find_tweets('sanders').count
-    @sanders += Tweet.find_tweets('bernie').count
-    @chafee += Tweet.find_tweets('chafee').count
-    @chafee += Tweet.find_tweets('lincoln').count
-    @webb += Tweet.find_tweets('webb').count
-    @webb += Tweet.find_tweets('jim').count
-    @trump += Tweet.find_tweets('trump').count
-    @trump += Tweet.find_tweets('donald').count
-    @carson += Tweet.find_tweets('carson').count
-    @carson += Tweet.find_tweets('ben').count
-    @bush += Tweet.find_tweets('bush').count
-    @bush += Tweet.find_tweets('jeb').count
-    @cruz += Tweet.find_tweets('cruz').count
-    @cruz += Tweet.find_tweets('ted').count
-    @rubio += Tweet.find_tweets('marco').count
-    @rubio += Tweet.find_tweets('rubio').count
-    @walker += Tweet.find_tweets('scott').count
-    @walker += Tweet.find_tweets('walker').count
+    @clinton += @tweets.find_tweets('hillary').count
+    @clinton += @tweets.find_tweets('clinton').count
+    @sanders += @tweets.find_tweets('sanders').count
+    @sanders += @tweets.find_tweets('bernie').count
+    @chafee  += @tweets.find_tweets('chafee').count
+    @chafee  += @tweets.find_tweets('lincoln').count
+    @webb    += @tweets.find_tweets('webb').count
+    @webb    += @tweets.find_tweets('jim').count
+    @trump   += @tweets.find_tweets('trump').count
+    @trump   += @tweets.find_tweets('donald').count
+    @carson  += @tweets.find_tweets('carson').count
+    @carson  += @tweets.find_tweets('ben').count
+    @bush    += @tweets.find_tweets('bush').count
+    @bush    += @tweets.find_tweets('jeb').count
+    @cruz    += @tweets.find_tweets('cruz').count
+    @cruz    += @tweets.find_tweets('ted').count
+    @rubio   += @tweets.find_tweets('marco').count
+    @rubio   += @tweets.find_tweets('rubio').count
+    @walker  += @tweets.find_tweets('scott').count
+    @walker  += @tweets.find_tweets('walker').count
     erb :totals
   end
 

@@ -25,19 +25,17 @@
       </div>
     </form>
   <div class="row">
-    <div class="large 12 columns text-center">
-      <h1>Tweet Chart</h1>
+    <div class="large 6 columns text-center">
+      <h1>Tweet Breakdown</h1>
       <canvas id="myChart" width="400" height="400"></canvas>
     </div>
-  </div>
 
-  <div class="row">
-    <div id="map-wrap" class="large 12 columns text-center">
+
+    <div id="map-wrap" class="large 6 columns text-center">
       <h1>Tweet Map</h1>
       <div id="tweet-map"></div>
     </div>
   </div>
-
 
 </div>
 
@@ -199,24 +197,5 @@
     var ctx = document.getElementById("myChart").getContext("2d");
     var myDoughnutChart = new Chart(ctx).Doughnut(data);
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 });
 </script>
