@@ -43,3 +43,12 @@ h1 {
 .brand-logo {
   margin-left: 1em;
 }
+
+ul {
+  list-style: none;
+}
+
+.pic {
+  height: 100px;
+  margin-right: 1em;
+}

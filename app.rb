@@ -133,8 +133,8 @@ class TwitterFetcher < Sinatra::Base
     erb :democrats
   end
 
-  get '/election/repulicans' do
-    erb :repulicans
+  get '/election/republicans' do
+    erb :republicans
   end
 
   #deomcrats*
@@ -143,7 +143,10 @@ class TwitterFetcher < Sinatra::Base
     @candidate = "Clinton"
     @users = User.all
     @tweets = Tweet.all
-    @matches = Tweet.find_tweets('Clinton').count
+    @matches = 0
+    @matches += Tweet.find_tweets('sanders').count
+    @matches += Tweet.find_tweets('bernie').count
+    @matches += Tweet.find_tweets('bernie sanders').count
     @total   = Tweet.count
 
     @lats = []
