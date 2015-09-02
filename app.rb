@@ -11,6 +11,7 @@ require './lib/user.rb'
 require './lib/tweet.rb'
 require 'will_paginate'
 require 'will_paginate/active_record'
+require 'will_paginate/array'
 
 class TwitterFetcher < Sinatra::Base
   include WillPaginate::Sinatra::Helpers
@@ -81,7 +82,7 @@ class TwitterFetcher < Sinatra::Base
     end
     @tweets = []
     @raw_tweets = []
-    @@twitter_client.search("#{query}", {result_type: 'recent', geocode: "45.5434085,-122.654422,8mi", count: 1000}).map do |tweet|
+    @@twitter_client.search("#{query}", {result_type: 'recent', count: 1000}).map do |tweet|
       if tweet.urls[0].respond_to? :url
         instagram = tweet.urls[0].url
       end
@@ -142,6 +143,7 @@ class TwitterFetcher < Sinatra::Base
   end
 
   get '/election/totals' do
+    @total = Tweet.count
     @tweets = Tweet.all
     @clinton = 0
     @sanders = 0
@@ -160,8 +162,9 @@ class TwitterFetcher < Sinatra::Base
     @sanders += @tweets.find_tweets('bernie').count
     @chafee  += @tweets.find_tweets('chafee').count
     @chafee  += @tweets.find_tweets('lincoln').count
-    @webb    += @tweets.find_tweets('webb').count
-    @webb    += @tweets.find_tweets('jim').count
+
+    @webb    += @tweets.find_tweets('webb').count || 0
+    @webb    += @tweets.find_tweets('jim').count || 0
     @trump   += @tweets.find_tweets('trump').count
     @trump   += @tweets.find_tweets('donald').count
     @carson  += @tweets.find_tweets('carson').count
@@ -177,6 +180,17 @@ class TwitterFetcher < Sinatra::Base
     erb :totals
   end
 
+  post '/search-filter' do
+
+    # @users = User.paginate(:page => params[:page], :per_page => 35)
+    # @tweets = Tweet.all
+
+    redirect "/search-filter/#{params['filter']}"
+  end
+  get '/search-filter/:filter' do
+    @tweets = Tweet.find_tweets(params["filter"]).paginate(:page => params[:page], :per_page => 25)
+    erb :filter_results
+  end
 
 
   get '/election/democrats/clinton' do
@@ -187,8 +201,8 @@ class TwitterFetcher < Sinatra::Base
 
     @matches = 0
     @matches += Tweet.find_tweets('clinton').count
-    @matches += Tweet.find_tweets('hillary').count
     @matches += Tweet.find_tweets('clinton hillary').count
+
 
 
     @users = User.find_by_tweets(@tweets)
@@ -196,113 +210,63 @@ class TwitterFetcher < Sinatra::Base
 
     @total   = Tweet.count
 
-    @lats = []
-    @lngs = []
-    @valid_users = []
-    @users.each do |user|
-      if user.geolat != nil
-        @lats.push(user.geolat)
-      end
-      if user.geolong != nil
-        @lngs.push(user.geolong)
-      end
-      if user.geolong != nil && user.geolat != nil
-        @valid_users.push(user.name)
-      end
-    end
-    @valid_users
+    # @lats = []
+    # @lngs = []
+    # @valid_users = []
+    # @users.each do |user|
+    #   if user.geolat != nil
+    #     @lats.push(user.geolat)
+    #   end
+    #   if user.geolong != nil
+    #     @lngs.push(user.geolong)
+    #   end
+    #   if user.geolong != nil && user.geolat != nil
+    #     @valid_users.push(user.name)
+    #   end
+    # end
+    #@valid_users
 
-    erb :tweets
+    erb :election_tweets
   end
 
   get '/election/democrats/sanders' do
     @candidate = "Bernie Sanders"
-    @users = User.all
-    @tweets = Tweet.all
+
+    @tweets = Tweet.find_tweets('sanders')
+    @users = User.find_by_tweets(@tweets)
     @matches = 0
-    @matches += Tweet.find_tweets('bernie').count
     @matches += Tweet.find_tweets('sanders').count
     @matches += Tweet.find_tweets('bernie sanders').count
 
     @total   = Tweet.count
 
-    @lats = []
-    @lngs = []
-    @valid_users = []
-    @users.each do |user|
-      if user.geolat != nil
-        @lats.push(user.geolat)
-      end
-      if user.geolong != nil
-        @lngs.push(user.geolong)
-      end
-      if user.geolong != nil && user.geolat != nil
-        @valid_users.push(user.name)
-      end
-    end
-    @valid_users
-
-    erb :tweets
+    erb :election_tweets
   end
 
   get '/election/democrats/chafee' do
     @candidate = "Lincoln Chafee"
-    @users = User.all
-    @tweets = Tweet.all
+    @tweets = Tweet.find_tweets('chafee')
+    @users = User.find_by_tweets(@tweets)
     @matches = 0
-    @matches += Tweet.find_tweets('lincoln').count
     @matches += Tweet.find_tweets('chafee').count
     @matches += Tweet.find_tweets('lincoln chafee').count
 
     @total   = Tweet.count
 
-    @lats = []
-    @lngs = []
-    @valid_users = []
-    @users.each do |user|
-      if user.geolat != nil
-        @lats.push(user.geolat)
-      end
-      if user.geolong != nil
-        @lngs.push(user.geolong)
-      end
-      if user.geolong != nil && user.geolat != nil
-        @valid_users.push(user.name)
-      end
-    end
-    @valid_users
-
-    erb :tweets
+    erb :election_tweets
   end
 
   get '/election/democrats/webb' do
     @candidate = "Jim Webb"
-    @users = User.all
-    @tweets = Tweet.all
+    @tweets = Tweet.find_tweets('webb')
+    @users = User.find_by_tweets(@tweets)
     @matches = 0
-    @matches += Tweet.find_tweets('jim').count
     @matches += Tweet.find_tweets('webb').count
     @matches += Tweet.find_tweets('jim webb').count
 
     @total   = Tweet.count
 
-    @lats = []
-    @lngs = []
-    @valid_users = []
-    @users.each do |user|
-      if user.geolat != nil
-        @lats.push(user.geolat)
-      end
-      if user.geolong != nil
-        @lngs.push(user.geolong)
-      end
-      if user.geolong != nil && user.geolat != nil
-        @valid_users.push(user.name)
-      end
-    end
-    @valid_users
-
-    erb :tweets
+    erb :election_tweets
   end
 
   #republicans
@@ -310,68 +274,79 @@ class TwitterFetcher < Sinatra::Base
   get '/election/republicans/trump' do
 
     @candidate = "Donald Trump"
-    @users = User.all
-    @tweets = Tweet.all
+    @tweets = Tweet.find_tweets('trump')
+    @users = User.find_by_tweets(@tweets)
     @matches = 0
-    @matches += Tweet.find_tweets('donald').count
     @matches += Tweet.find_tweets('trump').count
     @matches += Tweet.find_tweets('donald trump').count
-
-
-    @candidate = "Trump"
-
-    @tweets = Tweet.find_tweets('trump')
-    @matches = 0
-    @matches += Tweet.find_tweets('donald').count
-    @matches += Tweet.find_tweets('trump').count
-
-    @users = User.find_by_tweets(@tweets)
-
-
     @total   = Tweet.count
 
-    @lats = []
-    @lngs = []
-    @valid_users = []
-    @users.each do |user|
-      if user.geolat != nil
-        @lats.push(user.geolat)
-      end
-      if user.geolong != nil
-        @lngs.push(user.geolong)
-      end
-      if user.geolong != nil && user.geolat != nil
-        @valid_users.push(user.name)
-      end
-    end
-    @valid_users
-
-    erb :tweets
+    erb :election_tweets
   end
 
   get '/election/republicans/carson' do
+    @candidate = "Ben Carson"
+    @tweets = Tweet.find_tweets('carson')
+    @users = User.find_by_tweets(@tweets)
+    @matches = 0
+    @matches += Tweet.find_tweets('carson').count
+    @matches += Tweet.find_tweets('ben carson').count
 
-    erb :tweets
+
+    @total   = Tweet.count
+    erb :election_tweets
   end
 
   get '/election/republicans/bush' do
 
-    erb :tweets
+    @candidate = "Jeb Bush"
+    @tweets = Tweet.find_tweets('bush')
+    @users = User.find_by_tweets(@tweets)
+    @matches = 0
+    @matches += Tweet.find_tweets('bush').count
+    @matches += Tweet.find_tweets('jeb bush').count
+    @total   = Tweet.count
+
+    erb :election_tweets
   end
 
   get '/election/republicans/cruz' do
 
-    erb :tweets
+    @candidate = "Ted Cruz"
+    @tweets = Tweet.find_tweets('cruz')
+    @users = User.find_by_tweets(@tweets)
+    @matches = 0
+    @matches += Tweet.find_tweets('cruz').count
+    @matches += Tweet.find_tweets('ted cruz').count
+    @total   = Tweet.count
+
+    erb :election_tweets
   end
 
   get '/election/republicans/rubio' do
 
-    erb :tweets
+    @candidate = "Marco Rubio"
+    @tweets = Tweet.find_tweets('rubio')
+    @users = User.find_by_tweets(@tweets)
+    @matches = 0
+    @matches += Tweet.find_tweets('rubio').count
+    @matches += Tweet.find_tweets('marco rubio').count
+    @total   = Tweet.count
+
+    erb :election_tweets
   end
 
   get '/election/republicans/walker' do
 
-    erb :tweets
+    @candidate = "Scott Walker"
+    @tweets = Tweet.find_tweets('walker')
+    @users = User.find_by_tweets(@tweets)
+    @matches = 0
+    @matches += Tweet.find_tweets('walker').count
+    @matches += Tweet.find_tweets('scott walker').count
+    @total   = Tweet.count
+
+    erb :election_tweets
   end
 
 end

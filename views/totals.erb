@@ -1,29 +1,12 @@
 <div id="tweets-wrapper container">
 
-  <div class="row">
+  <!-- <div class="row">
     <div class="large 12 columns text-center">
       <h1>Tweet Results</h1>
     </div>
-  </div>
+  </div> -->
 
-  <div class="row">
-    <div class="large-12 columns text-center">
-      <button id="show-filter">Search within?</button>
-    </div>
-  </div>
-    <form id="filter-form" class="hidden" action="/search-filter" method="post">
-      <div class="row">
-        <div class="large 12 columns text-center">
-          <input name="filter" placeholder="Bernie Sanders">
-        </div>
 
-        <div class="row">
-          <div class="large 12 columns text-center">
-            <button type="submit">Filter</button>
-          </div>
-        </div>
-      </div>
-    </form>
   <div class="row">
     <div class="large 6 columns text-center">
       <h1>Tweet Breakdown</h1>
@@ -31,11 +14,11 @@
     </div>
 
 
-    <div id="map-wrap" class="large 6 columns text-center">
+    <!-- <div id="map-wrap" class="large 6 columns text-center">
       <h1>Tweet Map</h1>
       <div id="tweet-map"></div>
     </div>
-  </div>
+  </div> -->
 
 </div>
 
@@ -43,13 +26,13 @@
   $(document).ready(function() {
     var geoLat;
     var geoLong;
-    var lats = <%= @lats %>;
-    var lngs = <%= @lngs %>;
+    // var lats = <%= @lats %>;
+    // var lngs = <%= @lngs %>;
     var infowindow = null;
-    var users = <%= @valid_users %>;
+    // var users = <%= @valid_users %>;
     var markers = [];
     var total = <%= @total %>;
-    var matches = <%= @matches %>;
+    //var matches = <%= @matches %>;
 
     //show form on click
     $('#show-filter').on('click', function() {
@@ -146,52 +129,58 @@
       },
       {
         value: <%= @sanders %>,
-        color:"#008CBA",
-        highlight: "#007095",
+        color:"green",
+        highlight: "green",
         label: " Sanders mentions"
       },
       {
         value: <%= @chafee %>,
-        color:"#008CBA",
-        highlight: "#007095",
+        color:"purple",
+        highlight: "purple",
         label: " Chafee mentions"
       },
       {
-        value: <%= @web %>,
-        color:"#008CBA",
-        highlight: "#007095",
-        label: "Web mentions"
+        value: <%= @webb %>,
+        color:"orange",
+        highlight: "orange",
+        label: "Webb mentions"
       },
       {
         value: <%= @trump %>,
-        color:"#008CBA",
-        highlight: "#007095",
+        color:"red",
+        highlight: "red",
         label: " Trump mentions"
       },
       {
         value: <%= @carson %>,
-        color: "#e9e9e9",
-        highlight: "bdbdbd",
+        color: "purple",
+        highlight: "purple",
         label: "Carson mentions"
       },
       {
         value: <%= @bush %>,
-        color: "#e9e9e9",
-        highlight: "bdbdbd",
+        color: "pink",
+        highlight: "pink",
         label: "Bush mentions"
       },
       {
         value: <%= @rubio %>,
-        color: "#e9e9e9",
-        highlight: "bdbdbd",
-        label: "Cruz mentions"
+        color: "brown",
+        highlight: "brown",
+        label: "Rubio mentions"
       },
       {
         value: <%= @walker %>,
-        color: "#e9e9e9",
-        highlight: "bdbdbd",
+        color: "black",
+        highlight: "black",
         label: "Walker mentions"
       },
+      {
+        value: <%= @cruz %>,
+        color: "yellow",
+        highlight: "yellow",
+        label: "Cruz mentions"
+      }
 
     ]
     var ctx = document.getElementById("myChart").getContext("2d");

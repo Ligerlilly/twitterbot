@@ -1,0 +1,159 @@
+<div id="tweets-wrapper container">
+
+  <div class="row">
+    <div class="large 12 columns text-center">
+      <h1>Tweet Results</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="large-12 columns text-center">
+      <button id="show-filter">Search within?</button>
+    </div>
+  </div>
+  <form id="filter-form" class="hidden" action="/search-filter" method="post">
+    <div class="row">
+      <div class="large 12 columns text-center">
+        <input name="filter" placeholder="Bernie Sanders">
+      </div>
+
+      <div class="row">
+        <div class="large 12 columns text-center">
+          <button type="submit">Filter</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="row">
+    <div class="large 12 columns text-center">
+      <h1>Tweet Chart</h1>
+      <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+  </div>
+
+  <!-- <div class="row">
+    <div id="map-wrap" class="large 12 columns text-center">
+      <h1>Tweet Map</h1>
+      <div id="tweet-map"></div>
+    </div>
+  </div> -->
+
+
+</div>
+
+<script>
+$(document).ready(function() {
+  var geoLat;
+  var geoLong;
+  // var lats = <%= @lats %>;
+  // console.log(lats);
+  // var lngs = <%= @lngs %>;
+  var infowindow = null;
+  // var users = <%= @valid_users %>;
+  var markers = [];
+  var total = <%= @total %>;
+
+  var matches = <%= @matches %>;
+
+  //show form on click
+  $('#show-filter').on('click', function() {
+    $('#filter-form').toggleClass('hidden');
+  });
+  getCoordinates();
+  buildChart();
+
+  // get latitude in longitude
+  function getCoordinates() {
+    $.getJSON("http://www.telize.com/geoip?callback=?", function(json) {
+    })
+    .fail(function(jqxhr, textStatus, error) {
+      var err = textStatus + ", " + error;
+      console.log("Request Failed: " + err);
+      writeError();
+    })
+    .done(function(json) {
+      zipCode = json.postalCode;
+      geoLat  = json.latitude;
+      geoLong = json.longitude;
+
+      initMap();
+    })
+    .always(function() {
+      console.log('Search complete');
+    });
+  }
+
+  // build google map
+  function initMap() {
+    var myLatLng = { lat: geoLat, lng: geoLong };
+    var styles = [{"featureType":"water","elementType":"geometry","stylers":[{"color":"#e9e9e9"},{"lightness":17}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#f5f5f5"},{"lightness":20}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#ffffff"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":16}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#f5f5f5"},{"lightness":21}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#dedede"},{"lightness":21}]},{"elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#ffffff"},{"lightness":16}]},{"elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#333333"},{"lightness":40}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#f2f2f2"},{"lightness":19}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#fefefe"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#fefefe"},{"lightness":17},{"weight":1.2}]}]
+
+    var styledMap = new google.maps.StyledMapType(styles, {name: "Styled Map"});
+    var mapOptions = {
+      zoom: 13,
+      center: myLatLng,
+      mapTypeControlOptions: {
+        mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
+      }
+    }
+
+    map = new google.maps.Map(document.getElementById('tweet-map'), mapOptions);
+    map.mapTypes.set('map_style', styledMap);
+    map.setMapTypeId('map_style');
+
+    // plot user marker
+    var marker = new google.maps.Marker({
+      position: myLatLng,
+      map: map,
+      title: 'You are here!'
+    });
+
+    // print out the marker to the map
+    var place = function(newMark) {
+      newMark.setMap(map);
+    }
+
+    // Loop that takes each location and finds through google maps, and creates marker
+    for(i = 0; i < lats.length; i++) {
+      var marker = new google.maps.Marker({
+        position: { lat: lats[i], lng: lngs[i] },
+        map: map,
+        title: users[i],
+        icon: 'http://cdn.information-management.com/media/ui/twitter-icon-v2.png'
+      })
+      place(marker);
+      markers.push(marker);
+    }
+  }
+
+  // Print out an error if it doesn't work
+  function writeError() {
+    var errors = document.createElement("div");
+    errors.class = "error-message";
+    errors.text = "Something went wrong :("
+    document.body.errorBox.appendChild(errors);
+  }
+
+  // create chart
+  function buildChart() {
+    var data = [
+    {
+      value: matches,
+      color:"#008CBA",
+      highlight: "#007095",
+      label: " <%= @candidate %> mentions"
+    },
+    {
+      value: total - matches,
+      color: "#e9e9e9",
+      highlight: "bdbdbd",
+      label: "Total Tweets"
+    }
+    ]
+
+    var ctx = document.getElementById("myChart").getContext("2d");
+    var myDoughnutChart = new Chart(ctx).Doughnut(data);
+  }
+
+});
+</script>

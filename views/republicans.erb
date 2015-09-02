@@ -6,3 +6,30 @@
   <li><img class="pic" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Rubio_Circle.png/195px-Rubio_Circle.png" alt="Marco Rubio"><a href="/election/republicans/rubio">Marco Rubio</a></li>
   <li><img class="pic" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Walker_Circle.png/195px-Walker_Circle.png" alt="Scott Walker"><a href="/election/republicans/walker">Scott Walker</a></li>
 </ul>
+
+<div class="row">
+  <div class="large-12 columns text-center">
+    <button id="show-filter">Search within?</button>
+  </div>
+</div>
+<form id="filter-form" class="hidden" action="/search-filter" method="post">
+  <div class="row">
+    <div class="large 12 columns text-center">
+      <input name="filter" placeholder="Bernie Sanders">
+    </div>
+
+    <div class="row">
+      <div class="large 12 columns text-center">
+        <button type="submit">Filter</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+//show form on click
+<script charset="utf-8">
+  $('#show-filter').on('click', function() {
+    $('#filter-form').toggleClass('hidden');
+  });
+</script>
