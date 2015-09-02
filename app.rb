@@ -50,6 +50,18 @@ class TwitterFetcher < Sinatra::Base
     erb :search
   end
 
+
+  # search local
+  # post '/search_local' do
+  #   query = params['query']
+  #   if query.include?(' ')
+  #     query.gsub!(' ', '+')
+  #   end
+  #
+  #   redirect "/search_local/#{query}"
+  # end
+
+
   post '/search' do
     query = params['query']
     if query.include?(' ')
@@ -107,11 +119,6 @@ class TwitterFetcher < Sinatra::Base
     end
 
     @raw_tweets
-    #
-    # @raw_tweets.each do |tweet|
-    #   @lats = tweet.geo.coordinates.first
-    #   @lngs = tweet.geo.coordinates.last
-    # end
 
     @lats
     @lngs
@@ -144,9 +151,9 @@ class TwitterFetcher < Sinatra::Base
     @users = User.all
     @tweets = Tweet.all
     @matches = 0
-    @matches += Tweet.find_tweets('sanders').count
-    @matches += Tweet.find_tweets('bernie').count
-    @matches += Tweet.find_tweets('bernie sanders').count
+    @matches += Tweet.find_tweets('clinton').count
+    @matches += Tweet.find_tweets('hillary').count
+
     @total   = Tweet.count
 
     @lats = []
