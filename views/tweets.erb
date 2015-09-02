@@ -1,39 +1,23 @@
 <div id="tweets-wrapper container">
 
   <div class="row">
-    <div class="large 12 columns text-center">
+    <div class="large-12 columns text-center">
       <h1>Tweet Results</h1>
     </div>
   </div>
 
   <div class="row">
-    <div class="large-12 columns text-center">
-      <button id="show-filter">Search within?</button>
-    </div>
-  </div>
-    <form id="filter-form" class="hidden" action="/search-filter" method="post">
-      <div class="row">
-        <div class="large 12 columns text-center">
-          <input name="filter" placeholder="Bernie Sanders">
-        </div>
-
-        <div class="row">
-          <div class="large 12 columns text-center">
-            <button type="submit">Filter</button>
-          </div>
-        </div>
+    <div class="large-6 columns text-center" id="chartContainer">
+      <h2 class="heading">Tweet Chart</h2>
+      <div id="myChartLegend">
+        <div style="width:12px;height:12px;display:inline-block;background-color:#bdbdbd"></div>Overall
+        <div style="width:12px;height:12px;display:inline-block;background-color:#008CBA"></div>Matches
       </div>
-    </form>
-  <div class="row">
-    <div class="large 12 columns text-center">
-      <h1>Tweet Chart</h1>
-      <canvas id="myChart" width="400" height="400"></canvas>
+      <canvas id="myChart" width="350" height="350"></canvas>
     </div>
-  </div>
 
-  <div class="row">
-    <div id="map-wrap" class="large 12 columns text-center">
-      <h1>Tweet Map</h1>
+    <div id="map-wrap" class="large-6 columns text-center" id="mapContainer">
+      <h2 class="heading">Tweet Map</h2>
       <div id="tweet-map"></div>
     </div>
   </div>
@@ -46,7 +30,6 @@
     var geoLat;
     var geoLong;
     var lats = <%= @lats %>;
-    console.log(lats);
     var lngs = <%= @lngs %>;
     var infowindow = null;
     var users = <%= @valid_users %>;
@@ -54,10 +37,6 @@
     var total = <%= @total %>;
     var matches = <%= @matches %>;
 
-    //show form on click
-    $('#show-filter').on('click', function() {
-      $('#filter-form').toggleClass('hidden');
-    });
     getCoordinates();
     buildChart();
 
@@ -75,12 +54,33 @@
         geoLat  = json.latitude;
         geoLong = json.longitude;
 
+        submitLocation();
         initMap();
       })
       .always(function() {
         console.log('Search complete');
       });
     }
+
+    // submits the geolocation information from the user
+    function submitLocation() {
+        $.ajax({
+        type: 'POST',
+        data: { lat: geoLat, lng: geoLong },
+        dataType: 'script',
+        url: '/location'
+      })
+        .done(function(data) {
+          console.log("success")
+
+        })
+        .fail(function() {
+          console.log("failed")
+        })
+        .always(function() {
+          console.log("finished loading user info")
+        });
+    };
 
     // build google map
     function initMap() {
@@ -96,6 +96,7 @@
         }
       }
 
+      var infowindow = new google.maps.InfoWindow();
       map = new google.maps.Map(document.getElementById('tweet-map'), mapOptions);
       map.mapTypes.set('map_style', styledMap);
       map.setMapTypeId('map_style');
@@ -122,6 +123,10 @@
       })
       place(marker);
       markers.push(marker);
+      google.maps.event.addListener(marker, 'click', function () {
+        infowindow.setContent(this.html);
+        infowindow.open(map, this);
+      });
     }
   }
 
@@ -145,14 +150,13 @@
       {
         value: total - matches,
         color: "#e9e9e9",
-        highlight: "bdbdbd",
+        highlight: "#bdbdbd",
         label: "Total Tweets"
       }
     ]
-
     var ctx = document.getElementById("myChart").getContext("2d");
     var myDoughnutChart = new Chart(ctx).Doughnut(data);
-  }
 
+  }
 });
 </script>

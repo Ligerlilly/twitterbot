@@ -11,12 +11,17 @@ require './lib/user.rb'
 require './lib/tweet.rb'
 require 'will_paginate'
 require 'will_paginate/active_record'
+<<<<<<< HEAD
 require 'will_paginate/array'
+=======
+require 'sinatra/cookies'
+>>>>>>> cca95c33351238c481efc2d64a16ae392672ff86
 
 class TwitterFetcher < Sinatra::Base
   include WillPaginate::Sinatra::Helpers
 
   helpers Sinatra::Jsonp
+  helpers Sinatra::Cookies
 
   @@twitter_client = Twitter::REST::Client.new do |config|
     config.consumer_key       = ENV['consumer_key']
@@ -51,16 +56,52 @@ class TwitterFetcher < Sinatra::Base
     erb :search
   end
 
+  post '/location' do
+    cookies[:lat] = params['lat']
+    cookies[:lng] = params['lng']
+
+  end
+
+  get '/location/:lat/:lng' do
+    erb :local_search_form
+  end
+
+  get '/local_search' do
+    erb :local_search_form
+  end
 
   # search local
-  # post '/search_local' do
-  #   query = params['query']
-  #   if query.include?(' ')
-  #     query.gsub!(' ', '+')
-  #   end
-  #
-  #   redirect "/search_local/#{query}"
-  # end
+  post '/search_local' do
+    query = params['query']
+    if query.include?(' ')
+      query.gsub!(' ', '+')
+    end
+
+    redirect "/search_local/#{query}"
+  end
+
+  get '/search_local/:query' do
+    query = params['query']
+
+    if query.include?('+')
+      query.gsub!('+', ' ')
+    end
+
+    response = @@twitter_client.search("#{query}", { result_type: 'recent', geocode: "#{cookies[:lat]}, #{cookies[:lng]},50mi", count: 1000 })
+
+    result = JSON.parse(response.body)
+
+
+
+#     if response.code == '200' then
+#   result = JSON.parse(response.body)
+#   result['statuses'].each do |result|
+#   puts result
+#   puts "#{result['user']['screen_name']} : #{result['text']}"
+# end
+
+    erb :local_results
+  end
 
 
   post '/search' do
@@ -278,7 +319,13 @@ class TwitterFetcher < Sinatra::Base
     @users = User.find_by_tweets(@tweets)
     @matches = 0
     @matches += Tweet.find_tweets('trump').count
+<<<<<<< HEAD
     @matches += Tweet.find_tweets('donald trump').count
+=======
+
+    @users = User.find_by_tweets(@tweets)
+
+>>>>>>> cca95c33351238c481efc2d64a16ae392672ff86
     @total   = Tweet.count
 
     erb :election_tweets
