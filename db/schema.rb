@@ -37,4 +37,5 @@ ActiveRecord::Schema.define(version: 20150901183705) do
   end
 
   add_index "users", ["name"], name: "index_users_on_name", unique: true, using: :btree
+
 end

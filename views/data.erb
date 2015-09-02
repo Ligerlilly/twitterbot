@@ -1,6 +1,25 @@
-<ul>
+<table>
+  <thead>
+    <tr>
+      <th>Name:</th>
+      <th>Location:</th>
+      <th>Tweet:</th>
+    </tr>
+  </thead>
+  <tbody>
   <% @users.each do |user| %>
-    <li><%= user.name %></li>
+  <tr>
+
+      <td><%= user.name %></td>
+      <td><%= user.location %></td>
+
+
+      <td><%= Tweet.find_by_user_id(user.id) %></td>
+
+
+  </tr>
   <% end %>
-</ul>
+  </tbody>
+</table>
+
 <%= will_paginate @users %>

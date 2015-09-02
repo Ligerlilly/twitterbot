@@ -12,6 +12,16 @@ class Tweet < ActiveRecord::Base
     @results
   end
 
+  def self.find_by_user_id(user_id)
+    found_tweet = ''
+    self.all.each do |tweet|
+      if tweet.user_id == user_id
+        found_tweet = tweet.tweet
+      end
+    end
+    found_tweet
+  end
+
   before_save :tweet_downcase
 
 private

@@ -30,7 +30,7 @@ class TwitterFetcher < Sinatra::Base
   end
 
   get '/data' do
-    @users = User.paginate(:page => params[:page], :per_page => 10)
+    @users = User.paginate(:page => params[:page], :per_page => 35)
     @tweets = Tweet.all
     erb :data
   end
@@ -58,7 +58,7 @@ class TwitterFetcher < Sinatra::Base
 
     redirect "/search/#{query}"
   end
-
+  #, geocode: "45.5434085,-122.654422,8mi"
   get '/search/:query' do
     query = params['query']
     @lats = []
@@ -69,7 +69,7 @@ class TwitterFetcher < Sinatra::Base
     end
     @tweets = []
     @raw_tweets = []
-    @@twitter_client.search("#{query}", {result_type: 'recent', geocode: "45.5434085,-122.654422,8mi", count: 50}).map do |tweet|
+    @@twitter_client.search("#{query}", {result_type: 'recent', count: 1000}).map do |tweet|
       if tweet.urls[0].respond_to? :url
         instagram = tweet.urls[0].url
       end
@@ -141,22 +141,22 @@ class TwitterFetcher < Sinatra::Base
 
   get '/election/democrats/clinton' do
     @candidate = "Clinton"
-    @users = User.all 
+    @users = User.all
     @tweets = Tweet.all
     @matches = Tweet.find_tweets('Clinton').count
-    @total   = Tweet.count 
+    @total   = Tweet.count
 
     @lats = []
     @lngs = []
     @valid_users = []
-    @users.each do |user|  
+    @users.each do |user|
       if user.geolat != nil
         @lats.push(user.geolat)
-      end 
+      end
       if user.geolong != nil
         @lngs.push(user.geolong)
       end
-      if user.geolong != nil && user.geolat != nil 
+      if user.geolong != nil && user.geolat != nil
         @valid_users.push(user.name)
       end
     end
