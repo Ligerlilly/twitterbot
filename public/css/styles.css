@@ -30,17 +30,7 @@ h1 {
 /*#map-wrap {
   height: 1000px;
 }*/
-#chartContainer{
-  width: 40%;
-  height: 90%;
 
-}
-
-#mapContainer {
-
-  width: 50%;
-  height: 90%
-}
 
 #tweet-map {
   height: 400px;

@@ -1,0 +1,54 @@
+<form action="/search_local" method="post">
+  <input type="text" name="query" placeholder="whatever you like">
+
+  <button type="submit">Search</button>
+</form>
+<script>
+$(document).ready(function() {
+
+  getCoordinates();
+
+  function getCoordinates() {
+    $.getJSON("http://www.telize.com/geoip?callback=?", function(json) {
+    })
+    .fail(function(jqxhr, textStatus, error) {
+      var err = textStatus + ", " + error;
+      console.log("Request Failed: " + err);
+      writeError();
+    })
+    .done(function(json) {
+      zipCode = json.postalCode;
+      geoLat  = json.latitude;
+      geoLong = json.longitude;
+
+      submitLocation();
+    })
+    .always(function() {
+      console.log('Search complete');
+    });
+  }
+
+  // submits the geolocation information from the user
+  function submitLocation() {
+      $.ajax({
+      type: 'POST',
+      data: { lat: geoLat, lng: geoLong },
+      dataType: 'script',
+      url: '/location'
+    })
+      .done(function(data) {
+        console.log("success")
+      })
+      .fail(function(err) {
+        console.log("failed")
+        console.log(err);
+      })
+      .always(function() {
+        console.log("finished loading user info")
+      });
+  };
+});
+
+
+
+</script>
