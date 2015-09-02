@@ -24,6 +24,7 @@ class TwitterFetcher < Sinatra::Base
     config.oauth_token_secret = ENV['oath_token_secret']
   end
 
+
   get '/' do
      erb :index
   end
@@ -119,18 +120,6 @@ class TwitterFetcher < Sinatra::Base
 
     @raw_tweets
 
-    @names = []
-    @location = []
-    @description = []
-    @favorites_count = []
-    @followers_count = []
-    @raw_tweets.each do |tweet_object|
-      @names.push(tweet_object.user.name)
-      @location.push(tweet_object.user.location)
-      @description.push(tweet_object.user.description)
-      @favorites_count.push(tweet_object.user.favorites_count)
-      @followers_count.push(tweet_object.user.followers_count)
-    end
 
     erb :results
 
@@ -151,6 +140,28 @@ class TwitterFetcher < Sinatra::Base
   #deomcrats*
 
   get '/election/democrats/clinton' do
+    @candidate = "Clinton"
+    @users = User.all 
+    @tweets = Tweet.all
+    @matches = Tweet.find_tweets('Clinton').count
+    @total   = Tweet.count 
+
+    @lats = []
+    @lngs = []
+    @valid_users = []
+    @users.each do |user|  
+      if user.geolat != nil
+        @lats.push(user.geolat)
+      end 
+      if user.geolong != nil
+        @lngs.push(user.geolong)
+      end
+      if user.geolong != nil && user.geolat != nil 
+        @valid_users.push(user.name)
+      end
+    end
+    @valid_users
+
     erb :tweets
   end
 
@@ -169,7 +180,6 @@ class TwitterFetcher < Sinatra::Base
   #republicans
 
   get '/election/republicans/trump' do
-
     erb :tweets
   end
 
