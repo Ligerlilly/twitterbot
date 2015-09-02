@@ -113,7 +113,6 @@ class TwitterFetcher < Sinatra::Base
       @raw_tweets.push(tweet)
       @tweets.push "<img src='#{tweet.user.profile_image_url}' alt='img'> #{tweet.user.screen_name}: #{tweet.text} **** #{tweet.user.location} ++++ <a href='#{instagram}'>Instagram</a>"
 
-
     end
 
     @raw_tweets
@@ -142,18 +141,58 @@ class TwitterFetcher < Sinatra::Base
     erb :republicans
   end
 
-  #deomcrats*
+  get '/election/totals' do
+    @tweets = Tweet.all
+    @clinton = 0
+    @sanders = 0
+    @chafee = 0
+    @webb = 0
+    @trump = 0
+    @carson = 0
+    @bush = 0
+    @cruz = 0
+    @rubio = 0
+    @walker = 0
+
+    @clinton += @tweets.find_tweets('hillary').count
+    @clinton += @tweets.find_tweets('clinton').count
+    @sanders += @tweets.find_tweets('sanders').count
+    @sanders += @tweets.find_tweets('bernie').count
+    @chafee  += @tweets.find_tweets('chafee').count
+    @chafee  += @tweets.find_tweets('lincoln').count
+    @webb    += @tweets.find_tweets('webb').count
+    @webb    += @tweets.find_tweets('jim').count
+    @trump   += @tweets.find_tweets('trump').count
+    @trump   += @tweets.find_tweets('donald').count
+    @carson  += @tweets.find_tweets('carson').count
+    @carson  += @tweets.find_tweets('ben').count
+    @bush    += @tweets.find_tweets('bush').count
+    @bush    += @tweets.find_tweets('jeb').count
+    @cruz    += @tweets.find_tweets('cruz').count
+    @cruz    += @tweets.find_tweets('ted').count
+    @rubio   += @tweets.find_tweets('marco').count
+    @rubio   += @tweets.find_tweets('rubio').count
+    @walker  += @tweets.find_tweets('scott').count
+    @walker  += @tweets.find_tweets('walker').count
+    erb :totals
+  end
+
+
 
   get '/election/democrats/clinton' do
     @candidate = "Clinton"
-    @tweets = Tweet.find_tweets('clinton')
-    @users = User.find_by_tweets(@tweets)
 
+
+    @tweets = Tweet.find_tweets('clinton')
 
     @matches = 0
     @matches += Tweet.find_tweets('clinton').count
     @matches += Tweet.find_tweets('hillary').count
     @matches += Tweet.find_tweets('clinton hillary').count
+
+
+    @users = User.find_by_tweets(@tweets)
+
 
     @total   = Tweet.count
 
@@ -269,6 +308,7 @@ class TwitterFetcher < Sinatra::Base
   #republicans
 
   get '/election/republicans/trump' do
+
     @candidate = "Donald Trump"
     @users = User.all
     @tweets = Tweet.all
@@ -276,6 +316,17 @@ class TwitterFetcher < Sinatra::Base
     @matches += Tweet.find_tweets('donald').count
     @matches += Tweet.find_tweets('trump').count
     @matches += Tweet.find_tweets('donald trump').count
+
+
+    @candidate = "Trump"
+
+    @tweets = Tweet.find_tweets('trump')
+    @matches = 0
+    @matches += Tweet.find_tweets('donald').count
+    @matches += Tweet.find_tweets('trump').count
+
+    @users = User.find_by_tweets(@tweets)
+
 
     @total   = Tweet.count
 
