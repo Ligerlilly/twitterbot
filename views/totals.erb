@@ -46,7 +46,6 @@
     var geoLat;
     var geoLong;
     var lats = <%= @lats %>;
-    console.log(lats);
     var lngs = <%= @lngs %>;
     var infowindow = null;
     var users = <%= @valid_users %>;
@@ -142,21 +141,82 @@
   function buildChart() {
     var data = [
       {
-        value: matches,
+        value: <%= @clinton %>,
         color:"#008CBA",
         highlight: "#007095",
-        label: " <%= @candidate %> mentions"
+        label: " Clinton mentions"
       },
       {
-        value: total - matches,
+        value: <%= @sanders %>,
+        color:"#008CBA",
+        highlight: "#007095",
+        label: " Sanders mentions"
+      },
+      {
+        value: <%= @chafee %>,
+        color:"#008CBA",
+        highlight: "#007095",
+        label: " Chafee mentions"
+      },
+      {
+        value: <%= @web %>,
+        color:"#008CBA",
+        highlight: "#007095",
+        label: "Web mentions"
+      },
+      {
+        value: <%= @trump %>,
+        color:"#008CBA",
+        highlight: "#007095",
+        label: " Trump mentions"
+      },
+      {
+        value: <%= @carson %>,
         color: "#e9e9e9",
         highlight: "bdbdbd",
-        label: "Total Tweets"
-      }
+        label: "Carson mentions"
+      },
+      {
+        value: <%= @bush %>,
+        color: "#e9e9e9",
+        highlight: "bdbdbd",
+        label: "Bush mentions"
+      },
+      {
+        value: <%= @rubio %>,
+        color: "#e9e9e9",
+        highlight: "bdbdbd",
+        label: "Cruz mentions"
+      },
+      {
+        value: <%= @walker %>,
+        color: "#e9e9e9",
+        highlight: "bdbdbd",
+        label: "Walker mentions"
+      },
+
     ]
     var ctx = document.getElementById("myChart").getContext("2d");
     var myDoughnutChart = new Chart(ctx).Doughnut(data);
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 });
 </script>
