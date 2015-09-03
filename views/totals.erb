@@ -7,14 +7,14 @@
     </div>
 
     <div class="row text-center">
-
-      <div class="large-12 text-center columns">
-        <select name="">
-          <option value='election'>election</option>
-          <option value='president'>president</option>
-        </select>
-      </div>
-
+      <form id="total" action="total" method="post">
+        <div class="large-12 text-center columns">
+          <select id="choice">
+            <option value='election'>election</option>
+            <option value='president'>president</option>
+          </select>
+        </div>
+      </form>
     </div>
 
   <div class="row">
@@ -40,82 +40,110 @@
 </div>
 
 <script>
-  $(document).ready(function() {
+  $(window).ready(function() {
     var total = <%= @total %>;
 
-    //show form on click
     $('#show-filter').on('click', function() {
       $('#filter-form').toggleClass('hidden');
     });
 
-  buildChart();
+    $('#choice').on('change', sendForm());
 
-  function buildChart() {
-    var data = [
-      {
-        value: <%= @clinton %>,
-        color:"#008CBA",
-        highlight: "#007095",
-        label: " Clinton mentions"
-      },
-      {
-        value: <%= @sanders %>,
-        color:"green",
-        highlight: "green",
-        label: " Sanders mentions"
-      },
-      {
-        value: <%= @chafee %>,
-        color:"purple",
-        highlight: "purple",
-        label: " Chafee mentions"
-      },
-      {
-        value: <%= @webb %>,
-        color:"orange",
-        highlight: "orange",
-        label: "Webb mentions"
-      },
-      {
-        value: <%= @trump %>,
-        color:"red",
-        highlight: "red",
-        label: " Trump mentions"
-      },
-      {
-        value: <%= @carson %>,
-        color: "lightyellow",
-        highlight: "lightyellow",
-        label: "Carson mentions"
-      },
-      {
-        value: <%= @bush %>,
-        color: "pink",
-        highlight: "pink",
-        label: "Bush mentions"
-      },
-      {
-        value: <%= @rubio %>,
-        color: "brown",
-        highlight: "brown",
-        label: "Rubio mentions"
-      },
-      {
-        value: <%= @walker %>,
-        color: "black",
-        highlight: "black",
-        label: "Walker mentions"
+    buildChart();
 
-      },
-      {
-        value: <%= @cruz %>,
-        color: "yellow",
-        highlight: "yellow",
-        label: "Cruz mentions"
-      }
-    ]
-    var ctx = document.getElementById("myChart").getContext("2d");
-    var myDoughnutChart = new Chart(ctx).Doughnut(data);
-  }
-});
+    function sendForm() {
+      $.ajax({
+        type: 'POST',
+        data: { choice: $('#choice').val()  },
+        dataType: 'script',
+        url: '/totals/choice'
+      })
+      .done(function(data) {
+        buildChart();
+      })
+      .fail(function(err) {
+        console.log(err);
+        showError(err);
+      })
+      .always(function() {
+        console.log('form submitted');
+      })
+    };
+
+    function showError(err) {
+      var newError = document.createElement("h1");
+      newError.innerHTML = "Something went wrong :(";
+      newError.style.color = "white";
+      newError.style.backgroundColor = 'red';
+      document.body.appendChild(newError);
+    }
+
+    function buildChart() {
+      var data = [
+        {
+          value: <%= @clinton %>,
+          color:"#008CBA",
+          highlight: "#007095",
+          label: " Clinton mentions"
+        },
+        {
+          value: <%= @sanders %>,
+          color:"green",
+          highlight: "green",
+          label: " Sanders mentions"
+        },
+        {
+          value: <%= @chafee %>,
+          color:"purple",
+          highlight: "purple",
+          label: " Chafee mentions"
+        },
+        {
+          value: <%= @webb %>,
+          color:"orange",
+          highlight: "orange",
+          label: "Webb mentions"
+        },
+        {
+          value: <%= @trump %>,
+          color:"red",
+          highlight: "red",
+          label: " Trump mentions"
+        },
+        {
+          value: <%= @carson %>,
+          color: "lightyellow",
+          highlight: "lightyellow",
+          label: "Carson mentions"
+        },
+        {
+          value: <%= @bush %>,
+          color: "pink",
+          highlight: "pink",
+          label: "Bush mentions"
+        },
+        {
+          value: <%= @rubio %>,
+          color: "brown",
+          highlight: "brown",
+          label: "Rubio mentions"
+        },
+        {
+          value: <%= @walker %>,
+          color: "black",
+          highlight: "black",
+          label: "Walker mentions"
+
+        },
+        {
+          value: <%= @cruz %>,
+          color: "yellow",
+          highlight: "yellow",
+          label: "Cruz mentions"
+        }
+      ]
+      var ctx = document.getElementById("myChart").getContext("2d");
+      var myDoughnutChart = new Chart(ctx).Doughnut(data);
+    }
+  });
 </script>
