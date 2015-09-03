@@ -30,16 +30,31 @@
       <canvas id="myChart" width="400" height="400"></canvas>
     </div>
   </div>
-
-  <!-- <div class="row">
-    <div id="map-wrap" class="large 12 columns text-center">
-      <h1>Tweet Map</h1>
-      <div id="tweet-map"></div>
-    </div>
-  </div> -->
-
-
 </div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tweet:</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tweets.each do |tweet| %>
+    <tr>
+      <td><%= tweet.id %></td>
+      <td><%= tweet.tweet %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+
+
+
+
+
+
 
 <script>
 $(document).ready(function() {

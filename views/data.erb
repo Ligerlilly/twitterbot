@@ -1,4 +1,4 @@
-<div id="data-page-wrapper">  
+<div id="data-page-wrapper">
 
 <div class="row">
   <div class="large-12 columns text-left pagination-container">
@@ -12,8 +12,7 @@
         <th>Name:</th>
         <th>Location:</th>
         <th>Tweet:</th>
-<!--         <th>Latitude:</th>
-        <th>Longitude:</th> -->
+        <th>Search Query:</th>
       </tr>
     </thead>
     <tbody>
@@ -22,8 +21,7 @@
         <td><%= user.name %></td>
         <td><%= user.location %></td>
         <td><%= Tweet.find_by_user_id(user.id) %></td>
-<!--         <td><%= user.geolat %></td>
-        <td><%= user.geolong %></td> -->
+        <td><%= user.search %></td>
     </tr>
     <% end %>
     </tbody>
