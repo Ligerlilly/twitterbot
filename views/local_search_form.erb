@@ -1,8 +1,20 @@
-<form action="/search_local" method="post">
-  <input type="text" name="query" placeholder="whatever you like">
-
-  <button type="submit">Search</button>
+<form action="/search_local" method="post" data-abide>
+  <div class="large-12 columns text-center">
+    <h1>Local Search</h1>
+  </div>
+  <div class="row">
+    <div class="large-12 columns text-center">      
+      <input type="text" class="text-center error" required name="query">
+      <small class="error">You need to enter in a query.</small>
+    </div>   
+  </div>
+  <div class="row">
+    <div class="large-12 columns text-center">
+      <button type="submit">Search</button>
+    </div>
+  </div>
 </form>
+
 <script>
 $(document).ready(function() {
 

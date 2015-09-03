@@ -34,7 +34,7 @@ h1 {
 
 #tweet-map {
   height: 400px;
-  width: 400px;
+  width: 800px;
   margin: auto;
   display: inline-block;
 }
@@ -60,3 +60,25 @@ ul {
 #myChartLegend {
   margin: 1em;
 }
+
+/* tables */
+
+table {
+  margin: 10px auto;
+}
+
+.pagination-container {
+  margin-top: 20px;
+}
+
+button {
+  margin-top: 5px;
+}
+
+#map-container {
+  margin: auto;
+  height: 100%;
+  width: 100%;
+}
+
+

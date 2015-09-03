@@ -11,11 +11,9 @@ require './lib/user.rb'
 require './lib/tweet.rb'
 require 'will_paginate'
 require 'will_paginate/active_record'
-<<<<<<< HEAD
 require 'will_paginate/array'
-=======
 require 'sinatra/cookies'
->>>>>>> cca95c33351238c481efc2d64a16ae392672ff86
+require "will_paginate-foundation"
 
 class TwitterFetcher < Sinatra::Base
   include WillPaginate::Sinatra::Helpers
@@ -29,7 +27,6 @@ class TwitterFetcher < Sinatra::Base
     config.oauth_token        = ENV['oauth_token']
     config.oauth_token_secret = ENV['oath_token_secret']
   end
-
 
   get '/' do
      erb :index
@@ -59,7 +56,6 @@ class TwitterFetcher < Sinatra::Base
   post '/location' do
     cookies[:lat] = params['lat']
     cookies[:lng] = params['lng']
-
   end
 
   get '/location/:lat/:lng' do
@@ -87,18 +83,27 @@ class TwitterFetcher < Sinatra::Base
       query.gsub!('+', ' ')
     end
 
-    response = @@twitter_client.search("#{query}", { result_type: 'recent', geocode: "#{cookies[:lat]}, #{cookies[:lng]},50mi", count: 1000 })
+    @lat = cookies[:lat]
+    @lng = cookies[:lng]
 
-    result = JSON.parse(response.body)
+    @lats = []
+    @lngs = []
+    @tweets = []
+    @users = []
 
+    # @@twitter_client.search("#{query}", result_type: "recent", lat: "#{@lat}", long: "#{@lng}" ).map do |tweet|
+    @@twitter_client.search("#{query}", result_type: "recent", geocode:"#{@lat},#{@lng},100mi").map do |tweet|
+      if tweet.geo.coordinates.first.inspect != "<null>"
+        @lats.push(tweet.geo.coordinates.first)
+        @lngs.push(tweet.geo.coordinates.last)
+        @users.push(tweet.user.name)
+        @tweets.push(tweet.text)
+      end
+    end
 
-
-#     if response.code == '200' then
-#   result = JSON.parse(response.body)
-#   result['statuses'].each do |result|
-#   puts result
-#   puts "#{result['user']['screen_name']} : #{result['text']}"
-# end
+    @lats 
+    @lngs 
+    @tweets
 
     erb :local_results
   end
@@ -244,10 +249,7 @@ class TwitterFetcher < Sinatra::Base
     @matches += Tweet.find_tweets('clinton').count
     @matches += Tweet.find_tweets('clinton hillary').count
 
-
-
     @users = User.find_by_tweets(@tweets)
-
 
     @total   = Tweet.count
 
@@ -319,13 +321,12 @@ class TwitterFetcher < Sinatra::Base
     @users = User.find_by_tweets(@tweets)
     @matches = 0
     @matches += Tweet.find_tweets('trump').count
-<<<<<<< HEAD
+
     @matches += Tweet.find_tweets('donald trump').count
-=======
+
 
     @users = User.find_by_tweets(@tweets)
 
->>>>>>> cca95c33351238c481efc2d64a16ae392672ff86
     @total   = Tweet.count
 
     erb :election_tweets

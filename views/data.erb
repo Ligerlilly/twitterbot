@@ -1,28 +1,38 @@
-<table>
-  <thead>
+<div id="data-page-wrapper">  
+
+<div class="row">
+  <div class="large-12 columns text-left pagination-container">
+      <%= will_paginate @users, renderer: FoundationPagination::Sinatra %>
+  </div>
+</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name:</th>
+        <th>Location:</th>
+        <th>Tweet:</th>
+<!--         <th>Latitude:</th>
+        <th>Longitude:</th> -->
+      </tr>
+    </thead>
+    <tbody>
+    <% @users.each do |user| %>
     <tr>
-      <th>Name:</th>
-      <th>Location:</th>
-      <th>Tweet:</th>
+        <td><%= user.name %></td>
+        <td><%= user.location %></td>
+        <td><%= Tweet.find_by_user_id(user.id) %></td>
+<!--         <td><%= user.geolat %></td>
+        <td><%= user.geolong %></td> -->
     </tr>
-  </thead>
-  <tbody>
-  <% @users.each do |user| %>
-  <tr>
+    <% end %>
+    </tbody>
+  </table>
 
-      <td><%= user.name %></td>
-      <td><%= user.location %></td>
+  <div class="row">
+    <div class="large-12 columns text-left">
+      <%= will_paginate @users, renderer: FoundationPagination::Sinatra %>
+    </div>
+  </div>
 
-
-      <td><%= Tweet.find_by_user_id(user.id) %></td>
-      <td><%= user.geolat %></td>
-      <td><%= user.geolong %></td>
-
-
-
-  </tr>
-  <% end %>
-  </tbody>
-</table>
-
-<%= will_paginate @users %>
+</div>

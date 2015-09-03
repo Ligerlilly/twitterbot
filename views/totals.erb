@@ -6,13 +6,11 @@
     </div>
   </div> -->
 
-
   <div class="row">
     <div class="large 6 columns text-center">
       <h1>Tweet Breakdown</h1>
       <canvas id="myChart" width="400" height="400"></canvas>
     </div>
-
 
     <!-- <div id="map-wrap" class="large 6 columns text-center">
       <h1>Tweet Map</h1>
@@ -174,17 +172,14 @@
         color: "black",
         highlight: "black",
         label: "Walker mentions"
-<<<<<<< HEAD
+
       },
       {
         value: <%= @cruz %>,
         color: "yellow",
         highlight: "yellow",
         label: "Cruz mentions"
-=======
->>>>>>> cca95c33351238c481efc2d64a16ae392672ff86
       }
-
     ]
     var ctx = document.getElementById("myChart").getContext("2d");
     var myDoughnutChart = new Chart(ctx).Doughnut(data);

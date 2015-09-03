@@ -1,20 +1,14 @@
 <div id="search-form-wrapper" class="container">
-
   <div class="row">
-    <div class="large-12 columns button-container">
-      <form action="/search" method="post">
-        <div class="large-12 columns text-center">
-          <h1>Search</h1>
-        </div>
-        <input class="text-center" type="text" name="query" value="">
-
-        <div class="large-12 columns text-center">
-          <button type="submit" name="button">Search</button>
-        </div>
-      </form>
-    </div>
+    <form action="/search" method="post" data-abide>
+      <div class="large-12 columns text-center">
+        <h1>Search</h1>
+      </div>
+      <input class="text-center error" type="text" name="query" required value="">
+      <small class="error">You need to enter in a query.</small>
+      <div class="large-12 columns text-center">
+        <button type="submit" name="button">Search</button>
+      </div>
+    </form>
   </div>
-
-
-
 </div>
