@@ -80,7 +80,7 @@ class TwitterFetcher < Sinatra::Base
   get '/search_local/:query/:range' do
     query = params['query']
     range = params['range']
-    binding.pry
+  
     if query.include?('+')
       query.gsub!('+', ' ')
     end

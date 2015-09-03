@@ -33,14 +33,9 @@ h1 {
   margin-top: 3em;
 }
 
-/*#map-wrap {
-  height: 1000px;
-}*/
-
-
 #tweet-map {
-  height: 400px;
-  width: 800px;
+  height: 80vh;
+  width: 100vw;
   margin: auto;
   display: inline-block;
 }
@@ -125,8 +120,6 @@ button {
   background-image: url('/img/chafee.jpg');
 }
 
-
-/* Republican */
 .movie-poster-img-rep {
   height: 100vh;
   width: 16.6666666667%;
@@ -158,4 +151,20 @@ button {
 }
 #walker {
   background-image: url('/img/walker.jpg');
+}
+
+label {
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+
+.dropdown-container {
+  margin: 0 auto;
+
+}
+
+.dropdown-container select {
+  margin: 0 auto;
+  display: block;
 }
