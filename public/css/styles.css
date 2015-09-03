@@ -87,7 +87,6 @@ button {
   width: 100%;
 }
 
-
 .legend-container {
   margin-top: 5px;
 }
@@ -124,4 +123,39 @@ button {
 
 #chafee {
   background-image: url('/img/chafee.jpg');
+}
+
+
+/* Republican */
+.movie-poster-img-rep {
+  height: 100vh;
+  width: 16.6666666667%;
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position: center;
+  opacity: .8;
+}
+
+.movie-poster-img-rep:hover {
+  opacity: 1.0;
+  background-position: right center;
+}
+
+#trump {
+  background-image: url('/img/trump.jpg');
+}
+#carson {
+  background-image: url('/img/carson.jpg');
+}
+#bush {
+  background-image: url('/img/bush.jpg');
+}
+#cruz {
+  background-image: url('/img/cruz.jpg');
+}
+#rubio {
+  background-image: url('/img/rubio.jpg');
+}
+#walker {
+  background-image: url('/img/walker.jpg');
 }
