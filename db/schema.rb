@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150902205114) do
+ActiveRecord::Schema.define(version: 20150903161719) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 20150902205114) do
     t.float    "geolong"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "search"
   end
 
   add_index "users", ["name"], name: "index_users_on_name", unique: true, using: :btree
