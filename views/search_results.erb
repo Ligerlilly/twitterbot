@@ -1,8 +1,19 @@
 <h1>results for <%= @query %></h1>
 
-<ul>
-  <% @results.each do |r| %>
 
-  <li><%= r.tweet %></li>
-  <% end %>
-</ul>
+<table>
+  <thead>
+    <tr>
+      <th>Tweet:</th>
+      <th>Search Query:</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @results.each do |r| %>
+    <tr>
+      <td><%= r.tweet %></td>
+      <td><%= r.search %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

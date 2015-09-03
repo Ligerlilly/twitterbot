@@ -44,8 +44,9 @@ class TwitterFetcher < Sinatra::Base
 
   post '/data/search' do
     @query = params.fetch('query')
-
+    @query = @query.downcase
     @results = Tweet.find_tweets(@query)
+    @user
     erb :search_results
   end
 
@@ -152,7 +153,7 @@ class TwitterFetcher < Sinatra::Base
       end
 
       begin
-        Tweet.create({ tweet: tweet.text, user_id: user_id })
+        Tweet.create({ tweet: tweet.text, user_id: user_id, search: "#{query}"})
       rescue ActiveRecord::RecordNotUnique
 
       end
