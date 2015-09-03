@@ -15,6 +15,7 @@ require 'will_paginate/array'
 require 'sinatra/cookies'
 require "will_paginate-foundation"
 
+
 class TwitterFetcher < Sinatra::Base
   include WillPaginate::Sinatra::Helpers
 
@@ -54,7 +55,7 @@ class TwitterFetcher < Sinatra::Base
     erb :search
   end
 
-  # AJAX route 
+  # AJAX route
   post '/location' do
     cookies[:lat] = params['lat']
     cookies[:lng] = params['lng']
@@ -95,7 +96,6 @@ class TwitterFetcher < Sinatra::Base
     @tweets = []
     @users = []
 
-    # @@twitter_client.search("#{query}", result_type: "recent", lat: "#{@lat}", long: "#{@lng}" ).map do |tweet|
     @@twitter_client.search("#{query}", result_type: "recent", geocode:"#{@lat},#{@lng},#{range}mi").map do |tweet|
       if tweet.geo.coordinates.first.inspect != "<null>"
         @lats.push(tweet.geo.coordinates.first)
@@ -114,10 +114,11 @@ class TwitterFetcher < Sinatra::Base
 
   # AJAX route
   post '/totals/choice' do
-    choice = params['choice']
 
+    choice = params['choice']
     @total = Tweet.count
-    @tweets = Tweet.find_by_search(choice)
+    @tweets = Tweet.all
+
     @clinton = 0
     @sanders = 0
     @chafee = 0
@@ -129,26 +130,26 @@ class TwitterFetcher < Sinatra::Base
     @rubio = 0
     @walker = 0
 
-    @clinton += @tweets.find_tweets('hillary').count
-    @clinton += @tweets.find_tweets('clinton').count
-    @sanders += @tweets.find_tweets('sanders').count
-    @sanders += @tweets.find_tweets('bernie').count
-    @chafee  += @tweets.find_tweets('chafee').count
-    @chafee  += @tweets.find_tweets('lincoln').count
-    @webb    += @tweets.find_tweets('webb').count || 0
-    @webb    += @tweets.find_tweets('jim').count || 0
-    @trump   += @tweets.find_tweets('trump').count
-    @trump   += @tweets.find_tweets('donald').count
-    @carson  += @tweets.find_tweets('carson').count
-    @carson  += @tweets.find_tweets('ben').count
-    @bush    += @tweets.find_tweets('bush').count
-    @bush    += @tweets.find_tweets('jeb').count
-    @cruz    += @tweets.find_tweets('cruz').count
-    @cruz    += @tweets.find_tweets('ted').count
-    @rubio   += @tweets.find_tweets('marco').count
-    @rubio   += @tweets.find_tweets('rubio').count
-    @walker  += @tweets.find_tweets('scott').count
-    @walker  += @tweets.find_tweets('walker').count
+    @clinton += @tweets.find_by_search(choice, 'hillary')
+    @clinton += @tweets.find_by_search(choice, 'clinton')
+    @sanders += @tweets.find_by_search(choice, 'sanders')
+    @sanders += @tweets.find_by_search(choice, 'bernie')
+    @chafee  += @tweets.find_by_search(choice, 'chafee')
+    @chafee  += @tweets.find_by_search(choice, 'lincoln')
+    @webb    += @tweets.find_by_search(choice, 'webb')
+    @webb    += @tweets.find_by_search(choice, 'jim')
+    @trump   += @tweets.find_by_search(choice, 'trump')
+    @trump   += @tweets.find_by_search(choice, 'donald')
+    @carson  += @tweets.find_by_search(choice, 'carson')
+    @carson  += @tweets.find_by_search(choice, 'ben')
+    @bush    += @tweets.find_by_search(choice, 'bush')
+    @bush    += @tweets.find_by_search(choice, 'jeb')
+    @cruz    += @tweets.find_by_search(choice, 'cruz')
+    @cruz    += @tweets.find_by_search(choice, 'ted')
+    @rubio   += @tweets.find_by_search(choice, 'marco')
+    @rubio   += @tweets.find_by_search(choice, 'rubio')
+    @walker  += @tweets.find_by_search(choice, 'scott')
+    @walker  += @tweets.find_by_search(choice, 'walker')
     erb :totals
   end
 

@@ -14,6 +14,12 @@ html {
 }
 
 
+.div-legend {
+  width:12px;
+  height:12px;
+  display:inline-block;
+}
+
 html, body {
   height: 100%;
   margin: 0;
@@ -22,6 +28,7 @@ html, body {
 
 #site-title {
   margin-top: 1em;
+  font-size: 8em;
 }
 
 h1 {
