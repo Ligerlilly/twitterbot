@@ -22,6 +22,16 @@ class Tweet < ActiveRecord::Base
     found_tweet
   end
 
+  def self.find_by_search(query)
+    results = []
+    self.all.each do |tweet|
+      if tweet.search == query
+        results.push(tweet)
+      end
+    end
+    results
+  end
+
   before_save :tweet_downcase
 
 private
