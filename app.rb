@@ -69,16 +69,18 @@ class TwitterFetcher < Sinatra::Base
   # search local
   post '/search_local' do
     query = params['query']
+    range = params['range']
     if query.include?(' ')
       query.gsub!(' ', '+')
     end
 
-    redirect "/search_local/#{query}"
+    redirect "/search_local/#{query}/#{range}"
   end
 
-  get '/search_local/:query' do
+  get '/search_local/:query/:range' do
     query = params['query']
-
+    range = params['range']
+    binding.pry
     if query.include?('+')
       query.gsub!('+', ' ')
     end
@@ -92,7 +94,7 @@ class TwitterFetcher < Sinatra::Base
     @users = []
 
     # @@twitter_client.search("#{query}", result_type: "recent", lat: "#{@lat}", long: "#{@lng}" ).map do |tweet|
-    @@twitter_client.search("#{query}", result_type: "recent", geocode:"#{@lat},#{@lng},100mi").map do |tweet|
+    @@twitter_client.search("#{query}", result_type: "recent", geocode:"#{@lat},#{@lng},#{range}mi").map do |tweet|
       if tweet.geo.coordinates.first.inspect != "<null>"
         @lats.push(tweet.geo.coordinates.first)
         @lngs.push(tweet.geo.coordinates.last)
@@ -101,8 +103,8 @@ class TwitterFetcher < Sinatra::Base
       end
     end
 
-    @lats 
-    @lngs 
+    @lats
+    @lngs
     @tweets
 
     erb :local_results
