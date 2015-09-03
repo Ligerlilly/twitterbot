@@ -97,7 +97,7 @@ class TwitterFetcher < Sinatra::Base
         @lats.push(tweet.geo.coordinates.first)
         @lngs.push(tweet.geo.coordinates.last)
         @users.push(tweet.user.name)
-        @tweets.push(tweet.text)
+        @tweets.push(tweet.full_text)
       end
     end
 
