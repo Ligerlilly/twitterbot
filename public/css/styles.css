@@ -82,3 +82,10 @@ button {
 }
 
 
+.legend-container {
+  margin-top: 5px;
+}
+
+.legend-container div {
+  padding: 10px;
+}
