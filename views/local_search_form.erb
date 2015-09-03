@@ -3,11 +3,37 @@
     <h1>Local Search</h1>
   </div>
   <div class="row">
-    <div class="large-12 columns text-center">      
+    <div class="large-12 columns text-center">
       <input type="text" class="text-center error" required name="query">
       <small class="error">You need to enter in a query.</small>
-    </div>   
+    </div>
   </div>
+
+
+  <div class="row">
+    <div class="row">
+      <div class="12-columns text-center">
+        <label>Set the range of the search</label>
+      </div>
+    </div>
+    <div class="large-12 columns text-center">
+      <input class="text-center" type="number" name="range" id="days-off-count" value="28" />
+    </div>
+  </div>
+  <div class="row">
+    <div class="large-12 columns">
+      <div class="range-slider" data-slider data-options="display_selector: #days-off-count; initial: 15; start: 1; end: 250;">
+        <span class="range-slider-handle" role="slider" tabindex="0"></span>
+        <span class="range-slider-active-segment"></span>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+
   <div class="row">
     <div class="large-12 columns text-center">
       <button type="submit">Search</button>
